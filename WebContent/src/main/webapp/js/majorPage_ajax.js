@@ -485,6 +485,41 @@ function dialog_display(){
 	document.getElementById("rename_dialog").style.border = "1px solid #00f";
 }
 
+function add_dir(){
+	var dir_name = $("#dir_name").val();
+	console.log("new dir " + dir_name + " added.");
+	var form = new FormData();
+	var path = "/";
+	if(curr_path_array.length > 1)
+		path = "";
+	for(var i=1;i<curr_path_array.length;i++)
+		path = path + curr_path_array[i] + "/" ;
+	// 获取文件夹的路径
+
+
+	var whose = $.cookie("username");
+	console.log("Path: " + path);
+	console.log("Whose: "+ whose);
+
+	form.append("name", dir_name); //新建的目录名称
+	form.append("path", path);  //新建目录的位置
+	form.append("whose", whose);  //新建目录所属的用户
+
+	var Result;
+	$.ajax({
+		url: "FileDownloader!adddirRegister.action",
+		type: "POST",
+		data: form,
+		dataType: "text",
+		processData: false,
+		contentType: false,
+		async: false,
+		success: function(databack){
+			Result = $.parseJSON(databack);
+		}
+	});
+	console.log("Add dir " + Result.result);
+}
 
 function Check_fileRename() {
 	var path;
@@ -565,7 +600,7 @@ function fileRename() {
 				}
 			});
 
-			console.log("Rename" + renameResult.result);
+			console.log("Rename " + renameResult.result);
 			break;
 		}
 		//
@@ -612,6 +647,22 @@ $(document).ready(function(){
 		document.getElementById("rename_dialog").style.display="none";
 	})
 
+	$(".dirclose").click(function(){
+		document.getElementById("dirname_dialog").style.display="none";
+	})
+
+	$("#button_adddir").click(function(){
+		document.getElementById("dirname_dialog").style.display="block";
+		document.getElementById("dirname_dialog").style.width = "200px";
+		document.getElementById("dirname_dialog").style.height = "100px";
+		document.getElementById("dirname_dialog").style.border = "1px solid #00f";
+	})
+
+	$("#button_confirm2").click(function(){
+		add_dir();
+		document.getElementById("dirname_dialog").style.display="none";
+		//location.reload();
+	})
 	/*
 		<tr id="file_list_first">
 		<td> </td>

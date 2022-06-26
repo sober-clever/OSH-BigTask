@@ -25,10 +25,21 @@ public class FileUploader extends ActionSupport{
 	private int noa;
 	private int nod;
 	private String whose;
+	private String dirName;
 	private int fileId;
 	//TODO
 	private static final String fragmentFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/downloadFragment";
 	private static final String fileFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/tmpFile";
+
+	public String getdirName()
+	{
+		return this.dirName;
+	}
+
+	public void setdirName(String dirName)
+	{
+		this.dirName = dirName;
+	}
 
 	public	String	getPath()
 	{

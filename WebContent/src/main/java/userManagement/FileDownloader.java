@@ -308,6 +308,31 @@ public class FileDownloader extends ActionSupport{
 		}
 	}
 
+	public String adddirRegister(){
+		Query query = new Query();
+
+		boolean flag = query.queryDir(whose, name, path); //查询是否存在这个目录
+
+		if(flag){ //说明文件夹已经存在
+			result = "Failure: the dir already exists.";
+			return "success";
+		}
+
+		// 目录不存在，可以新建该目录 
+
+		Query query1 = new Query();
+
+		flag = query1.addDir(whose, name, path);
+		if(!flag){
+			//result = "Failure: dir add error";
+			result = whose + " " + name + " " + path; 
+			return "success";
+		}
+
+		result = "Success";
+		return "success";
+	}
+
 	public String deleteRegister(){
 		System.out.println("deleteRegister is called");
 

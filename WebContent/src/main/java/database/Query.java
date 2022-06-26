@@ -442,6 +442,46 @@ public class Query {
         return fileArray;
 	}*/
 
+    public boolean queryDir(String whose, String dirName, String path){
+    // 用于查询某个用户的特定路径下是否有某个名字的目录
+        Statement stmt = null;
+        ResultSet rs = null;
+        try{
+            stmt = conn.createStatement();
+            String sql;
+            sql = String.format("SELECT * FROM DFS.FILE WHERE WHOSE='%s' AND NAME='%s' AND PATH='%s' AND ISFOLDER='1'; ", whose, dirName, path);
+            rs = stmt.executeQuery(sql);
+            conn.close();
+            if(rs.next()) //说明已经存在这个文件夹
+                return true;
+            else{
+                return false; //说明这个文件夹不存在
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addDir(String whose, String dirName, String path){
+        Statement stmt = null;
+        try{
+            stmt = conn.createStatement();
+            String sql;
+            sql = String.format("INSERT INTO DFS.FILE (NAME,PATH,ATTRIBUTE,TIME,NOD,NOA,ISFOLDER,WHOSE,FILETYPE,FILESIZE)"
+            +"VALUES ('%s','%s','rwxrwxrwx','', 0, 0,true,'%s','', 0);", dirName, path, whose);
+
+            stmt.executeUpdate(sql);
+
+            conn.close();
+
+            return true;
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public String queryFragment(int id){
         Statement stmt = null;
         ResultSet rs = null;

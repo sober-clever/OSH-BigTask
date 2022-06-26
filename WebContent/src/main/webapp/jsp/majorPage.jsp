@@ -198,6 +198,19 @@
 	</form>
 </div>
 
+<div id="dirname_dialog" style="display: none;" title="新建文件夹">
+	<form>
+		<div class="modal-content">
+			<span class="dirclose">&times;</span>
+		</div>
+		<p>请输入目录的名字</p>
+		<p><input type="text" id="dir_name"></p>
+		<div style="float: right">
+			<button class="layui-button layui-btn-radius layui-btn-normal" type="button" id="button_confirm2">确认</button>
+		</div>
+	</form>
+</div>
+
 <div class="layui-btn-container" style="margin: 50px auto 30px; text-align:center;">
 	<button class="layui-btn layui-btn-radius" type="button" id="button_download">下载</button>
 	<input type="file" id="files" style="display: none" onchange="fileUpload();">
@@ -205,6 +218,7 @@
 	<button class="layui-btn layui-btn-radius layui-btn-normal" type="button" id="button_upload">上传</button>
 	<button class="layui-btn layui-btn-radius layui-btn-danger" type="button" id="button_delete">删除</button>
 	<button class="layui-btn layui-btn-radius layui-btn-primary" type="button" id="button_rename">重命名</button>
+	<button class="layui-btn layui-btn-radius layui-btn-primary" type="button" id="button_adddir">新建目录</button>
 </div>
 
 <div style="margin:10px auto 100px; text-align:center; width:60%; font-family:Microsoft YaHei,微软雅黑,Microsoft JhengHei,华文细黑,STHeiti,MingLiu; font-size: 2.5rem;">
