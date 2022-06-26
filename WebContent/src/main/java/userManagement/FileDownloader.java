@@ -285,21 +285,32 @@ public class FileDownloader extends ActionSupport{
 		Query query = new Query();
 
 		
-		/*FileItem fileItem = query.queryFile(path, name);
+		FileItem fileItem = query.queryFile(path, name);
 
-		int nod = fileItem.getNod();
+		int nod = fileItem.getNod();  // 获取 division 的数量
 
-		int noa = fileItem.getNoa();
+		int noa = fileItem.getNoa();  // 获取 append 的数量
 
-		int id = fileItem.getId();*/
+		int id = fileItem.getId();  // 获取文件的 id
 
-		for(int i=0; i<nod+noa; i++){
-			//query.deleteFragment(id*100+i);
+		boolean frag_flag = true;
+		int fail_id = -1;
+		for(int i=0; i<nod+noa; i++){  // 删除相应的文件碎片
+			Query query1 = new Query();
+			frag_flag = query1.deleteFragment(id*100+i);
+			if(!frag_flag) {
+				fail_id = id*100 + i;
+				break;
+			}
 		}
 
 		boolean flag=query.deleteFile(path, name);
-		if(flag){
+		if(flag && frag_flag){
 			result = "success";
+			return "success";
+		}
+		else if(!frag_flag){
+			result = "failure" + fail_id;
 			return "success";
 		}
 		else{

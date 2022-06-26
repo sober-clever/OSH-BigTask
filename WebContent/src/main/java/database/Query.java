@@ -96,7 +96,6 @@ public class Query {
             String sql;
             sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s'", name, path);
 
-
             stmt.executeUpdate(sql);
 
             System.out.println("数据库删除成功");
@@ -104,7 +103,7 @@ public class Query {
             System.out.println("数据库关闭成功");
             return true;
 
-        } catch (SQLException e){
+        } catch (Exception e){
             e.printStackTrace();
             return false;
         }
@@ -116,7 +115,7 @@ public class Query {
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("DELETE FROM DFS.FRAGMENT WHERE ID='%d' ", fragmentID);
+            sql = String.format("DELETE FROM DFS.FRAGMENT WHERE ID='%d'", fragmentID);
 
             stmt.executeUpdate(sql);
 
@@ -125,7 +124,7 @@ public class Query {
             System.out.println("数据库关闭成功");
             return true;
 
-        } catch (SQLException e){
+        } catch (Exception e){
             e.printStackTrace();
             return false;
         }
