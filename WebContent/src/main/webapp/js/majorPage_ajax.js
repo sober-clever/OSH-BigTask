@@ -320,6 +320,7 @@ function fileUpload() {
 
 	let selectedFile = document.getElementById('files').files[0];//TODO multisel file
 	encodeFile(selectedFile);
+	//location.reload();
 
 }
 function fileDownload() {
@@ -588,10 +589,12 @@ $(document).ready(function(){
 
 	$("#button_upload").click(function() {
 		$("#files").click();
+		//location.reload();
 	});
 
 	$("#button_delete").click(function(){
 		fileDelete();
+		location.reload();
 	})
 
 	$("#button_rename").click(function(){
@@ -602,6 +605,7 @@ $(document).ready(function(){
 	$("#button_confirm").click(function(){
 		document.getElementById("rename_dialog").style.display="none";
 		fileRename();
+		location.reload();
 	});
 
 	$(".close").click(function(){
