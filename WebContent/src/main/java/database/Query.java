@@ -88,6 +88,26 @@ public class Query {
         return fileItem;
     }
 	
+    public boolean renameFile(String path, String name, String newname){
+        Statement stmt=null;
+        try{
+            stmt = conn.createStatement();
+
+            String sql;
+            sql = String.format("Update DFS.FILE SET NAME='%s' WHERE NAME='%s' AND PATH='%s'", newname, name, path);
+            
+            stmt.executeUpdate(sql);
+
+            System.out.println("重命名成功");
+            conn.close();
+            System.out.println("数据库关闭成功");
+            return  true;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean deleteFile(String path, String name){
         Statement stmt = null;
         try {

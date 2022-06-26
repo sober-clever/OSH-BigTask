@@ -475,6 +475,103 @@ function fileDelete() {
 		item = item.next();
 	}
 }
+
+
+function dialog_display(){
+	document.getElementById("rename_dialog").style.display = "block";
+	document.getElementById("rename_dialog").style.width = "200px";
+	document.getElementById("rename_dialog").style.height = "100px";
+	document.getElementById("rename_dialog").style.border = "1px solid #00f";
+}
+
+
+function Check_fileRename() {
+	var path;
+	var name;
+	var item=$("#file_list_body").children();
+	var flag = false;
+	item = item.next();
+	while(item.length!=0)
+	{
+		name = "";
+		path = "";
+		//如果ｉｔｅｍ不为空，则进行处理
+		var children=item.children();
+		if( (children[1].children[1].className=="glyphicon glyphicon-file") && (children[1].children[0].children[0].checked))
+		{
+			//文件路径
+			path = path + "/";
+			/*********/					
+			if(curr_path_array.length>1)
+				path="";
+			for(var i=1;i<curr_path_array.length;i++)
+				path = path + curr_path_array[i] + "/" ;
+			//文件名
+			name = name + $.trim(children[1].innerText);
+			flag = true;
+			console.log(path+"-"+name);
+			break;
+		}
+		//
+		item = item.next();
+	}
+	if(flag){  //表明有选中文件
+		console.log("Rename action detected.");
+		dialog_display();
+	}
+}
+
+function fileRename() {
+	var new_name = $("#new_name").val();
+	console.log("the new file name is " + new_name);
+	var path;
+	var name;
+	var item=$("#file_list_body").children();
+	item = item.next();
+	while(item.length!=0)
+	{
+		name = "";
+		path = "";
+		//如果ｉｔｅｍ不为空，则进行处理
+		var children=item.children();
+		if( (children[1].children[1].className=="glyphicon glyphicon-file") && (children[1].children[0].children[0].checked))
+		{
+			//文件路径
+			path = path + "/";
+			/*********/					
+			if(curr_path_array.length>1)
+				path="";
+			for(var i=1;i<curr_path_array.length;i++)
+				path = path + curr_path_array[i] + "/" ;
+			//文件名
+			name = name + $.trim(children[1].innerText);
+			
+			var renameResult;
+			var form = new FormData();
+			form.append("path", path);
+			form.append("name", name);
+			form.append("newname", new_name);
+			$.ajax({
+				url:"FileDownloader!renameRegister.action",
+				type:"POST",
+				data:form,
+				dataType:"text",
+				processData:false,
+				contentType:false,
+				async:false,
+				success:function(databack){
+					renameResult = $.parseJSON(databack);
+				}
+			});
+
+			console.log("Rename" + renameResult.result);
+			break;
+		}
+		//
+		item = item.next();
+	}
+}
+
 $(document).ready(function(){
 	curr_path_array = [];
 	curr_path_array[0] = "/";
@@ -496,6 +593,21 @@ $(document).ready(function(){
 	$("#button_delete").click(function(){
 		fileDelete();
 	})
+
+	$("#button_rename").click(function(){
+		console.log("Start renaming");
+		Check_fileRename();
+	})
+
+	$("#button_confirm").click(function(){
+		document.getElementById("rename_dialog").style.display="none";
+		fileRename();
+	});
+
+	$(".close").click(function(){
+		document.getElementById("rename_dialog").style.display="none";
+	})
+
 	/*
 		<tr id="file_list_first">
 		<td> </td>

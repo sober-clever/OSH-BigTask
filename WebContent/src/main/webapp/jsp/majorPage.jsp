@@ -185,6 +185,19 @@
 	</table>
 </div>
 
+<div id="rename_dialog" style="display: none;" title="重命名">
+	<form>
+		<div class="modal-content">
+			<span class="close">&times;</span>
+		</div>
+		<p>请输入新的文件名</p>
+		<p><input type="text" id="new_name"></p>
+		<div style="float: right">
+			<button class="layui-button layui-btn-radius layui-btn-normal" type="button" id="button_confirm">确认</button>
+		</div>
+	</form>
+</div>
+
 <div class="layui-btn-container" style="margin: 50px auto 30px; text-align:center;">
 	<button class="layui-btn layui-btn-radius" type="button" id="button_download">下载</button>
 	<input type="file" id="files" style="display: none" onchange="fileUpload();">

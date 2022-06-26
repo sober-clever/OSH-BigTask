@@ -14,6 +14,7 @@ public class FileDownloader extends ActionSupport{
 	private	static final long serialVersionUID = 1L;
 	private String path;
 	private String name;
+	private String newname;
 	private String whose;
 	//用来返回结果给前端
     private	String	result;
@@ -26,6 +27,16 @@ public class FileDownloader extends ActionSupport{
 	private static final String fragmentFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/downloadFragment";
 	private static final String fileFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/tmpFile";
 	
+	public String getNewname()
+	{
+		return this.newname;
+	}
+
+	public void setNewname(String newname)
+	{
+		this.newname = newname;
+	}
+
 	public String getWhose()
 	{
 		return this.whose;
@@ -94,7 +105,7 @@ public class FileDownloader extends ActionSupport{
 		return this.fileType;
 	}
 
-	public void setFileType(String devices)
+	public void setFileType(String fileType)
 	{
 		this.fileType = fileType;
 	}
@@ -279,6 +290,24 @@ public class FileDownloader extends ActionSupport{
 		}		
 	}
 	
+
+	public String renameRegister(){
+		System.out.println("renameRegister is called");
+
+		Query query = new Query();
+
+		boolean flag = query.renameFile(path, name, newname);
+
+		if(flag){
+			result = "success";
+			return "success";
+		}
+		else{
+			result = "failure";
+			return "success";
+		}
+	}
+
 	public String deleteRegister(){
 		System.out.println("deleteRegister is called");
 
