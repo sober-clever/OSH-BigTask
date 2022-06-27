@@ -653,7 +653,7 @@ $(document).ready(function(){
 
 	$("#button_delete").click(function(){
 		fileDelete();
-		//location.reload();
+		location.reload();
 	})
 
 	$("#button_rename").click(function(){
@@ -664,7 +664,7 @@ $(document).ready(function(){
 	$("#button_confirm").click(function(){
 		document.getElementById("rename_dialog").style.display="none";
 		fileRename();
-		//location.reload();
+		location.reload();
 	});
 
 	$(".close").click(function(){

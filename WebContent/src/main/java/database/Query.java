@@ -380,7 +380,7 @@ public class Query {
             stmt = conn.createStatement();
             String sql;
             
-            sql = String.format("SELECT * FROM DFS.FILE WHERE WHOSE='%s' AND PATH REGEXP '%s';", whose, dirpath);
+            sql = String.format("SELECT * FROM DFS.FILE WHERE WHOSE='%s' AND PATH REGEXP '^%s';", whose, dirpath);
 
             rs = stmt.executeQuery(sql);
             
