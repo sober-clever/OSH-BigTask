@@ -167,13 +167,13 @@
 						{
 							out.println("<td>");
 							out.println("<label><input type=\"checkbox\">&emsp;&emsp;</label>");
-							out.println("<i class=\"glyphicon glyphicon-file\"></i>&emsp;" + files[i].getFileName() + "</td>");
+							out.println("<i class=\"glyphicon glyphicon-file\"> "+ files[i].getFileName() + "</i>&emsp;</td>");
 						}
 						else
 						{
 							out.println("<td>");
 							out.println("<label><input type=\"checkbox\">&emsp;&emsp;</label>");
-							out.println("<i class=\"glyphicon glyphicon-folder-open\"></i>&emsp;" + files[i].getFileName() + "</td>");
+							out.println("<i class=\"glyphicon glyphicon-folder-open\"> "+ files[i].getFileName() + "</i>&emsp;</td>");
 						}
 						out.println("<td>"+files[i].getAttribute()+"</td>");
 						out.println("<td>"+files[i].getTime()+"</td>");

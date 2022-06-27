@@ -108,13 +108,35 @@ public class Query {
         }
     }
 
+    public boolean deleteDir(String path, String name){
+        Statement stmt = null;
+        try {
+            stmt = conn.createStatement();
+
+            String sql;
+            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='1';", name, path);
+
+            stmt.executeUpdate(sql);
+
+            System.out.println("数据库删除成功");
+            conn.close();
+            System.out.println("数据库关闭成功");
+            return true;
+
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
     public boolean deleteFile(String path, String name){
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s'", name, path);
+            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='0';", name, path);
 
             stmt.executeUpdate(sql);
 
@@ -319,6 +341,74 @@ public class Query {
         //System.out.println(time);
         return time;
     }*/
+
+
+    public FileItem[] queryDirFile(String whose, String dirpath){
+        // dirpath 是目录的绝对路径
+        // 查询某个目录下的文件列表
+        Statement stmt = null;
+        ResultSet rs = null;
+        FileItem fileArray[] = null;
+
+        int id, noa, nod;
+        String name, attr, time;
+        boolean isFolder;
+
+        int count, i;
+
+        try{
+            stmt = conn.createStatement();
+            String sql;
+            
+            sql = String.format("SELECT * FROM DFS.FILE WHERE WHOSE='%s' AND PATH REGEXP '%s';", whose, dirpath);
+
+            rs = stmt.executeQuery(sql);
+            
+            if(!rs.last())
+                return null;
+
+            count = rs.getRow();
+
+            fileArray=new FileItem[count];
+            i=0;
+            rs.first();
+
+            while(i<count){
+                id = rs.getInt("ID");
+                nod = rs.getInt("NOD");
+                noa = rs.getInt("NOA");
+                name = rs.getString("NAME");
+                attr = rs.getString("ATTRIBUTE");
+                time = rs.getString("TIME");
+                isFolder = rs.getBoolean("ISFOLDER");
+                String fileType=rs.getString("FILETYPE");
+                int fileSize=rs.getInt("FILESIZE");
+                String path=rs.getString("PATH");
+                fileArray[i]=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose);
+                rs.next();
+                i++;
+            }
+            conn.close();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null && !rs.isClosed())
+                    rs.close();
+            }
+            catch(Exception e){
+            }
+            try{
+                if(stmt!=null && !stmt.isClosed())
+                    stmt.close();
+            }
+            catch(Exception e){
+            }
+        }
+        return fileArray;
+    }
 
     public FileItem[] queryFileList(String whose, String path){
         // 查询文件列表

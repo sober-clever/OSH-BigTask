@@ -428,8 +428,7 @@ function fileDelete() {
 		path = "";
 		//如果ｉｔｅｍ不为空，则进行处理
 		var children=item.children();
-		if( (children[1].children[1].className=="glyphicon glyphicon-file") && (children[1].children[0].children[0].checked) )
-		{
+		if( children[1].children[0].children[0].checked ){
 			//文件路径
 			path = path + "/";
 			/*********/					if(curr_path_array.length>1)
@@ -451,11 +450,20 @@ function fileDelete() {
 			var	form=new FormData();
 			var deviceArray;
 			var deleteResult;
+			
+			var isfolder = 0;
+			if(children[1].children[1].className=="glyphicon glyphicon-file")
+				isfolder = 0;
+			else
+				isfolder = 1;
+			
 			var whose = $.cookie("username");
-			console.log(whose);
+			console.log(whose + " " + path + " " + name);
 			form.append("path", path);
 			form.append("name", name);
-			//form.append("whose", whose);
+			form.append("isfolder", isfolder);
+			form.append("whose", whose);
+
 			$.ajax({
 				url:"FileDownloader!deleteRegister.action",
 				type:"POST",
@@ -629,7 +637,7 @@ $(document).ready(function(){
 
 	$("#button_delete").click(function(){
 		fileDelete();
-		location.reload();
+		//location.reload();
 	})
 
 	$("#button_rename").click(function(){
@@ -661,7 +669,7 @@ $(document).ready(function(){
 	$("#button_confirm2").click(function(){
 		add_dir();
 		document.getElementById("dirname_dialog").style.display="none";
-		//location.reload();
+		location.reload();
 	})
 	/*
 		<tr id="file_list_first">
@@ -675,52 +683,55 @@ $(document).ready(function(){
 	
 	
 	//点击文件目录进入其子目录　　刷新文件目录列表
-	$("#file_list_body").on("click","tr.file_list_go",
-			function()
+	$("#file_list_body").on("click","i.glyphicon-folder-open",
+			function(){
+			//如果是文件而不是文件夹，点击不刷新目录，提示信息
+			/*if(this.children[1].children[1].className=="glyphicon glyphicon-file")
 			{
-				//如果是文件而不是文件夹，点击不刷新目录，提示信息
-				if(this.children[1].children[1].className=="glyphicon glyphicon-file")
-				{
-					$("#statusFeedback").text("您所点击的是文件而不是文件夹，无法进入该目录！");
-					return;
-				}
-				//更新路径显示
-				curr_path_array = curr_path_array.concat( $.trim(this.children[1].innerText) ) //此处用$.trim去除空格
-				curr_path_html = "<li>ROOT</li>";
-				for(var i=1;i<curr_path_array.length;i++)
-				curr_path_html = curr_path_html + "<li>" + curr_path_array[i] + "</li>";
-				$("#curr_path").html(curr_path_html);		
-				//ajax
-				var QueryPath="/";
-/*********/		if(curr_path_array.length>1)
-					QueryPath="";
-				for(var i=1;i<curr_path_array.length;i++)
-				{
-					QueryPath = QueryPath + curr_path_array[i] + "/" ;
-				}
-				var	form=new FormData();
-
-				var whose = $.cookie("username");
-				form.append("Whose", whose);
-				form.append("Path",QueryPath);
-				//console.log(form.get("whose"));
-				//alert(queryPath);
-				$.ajax({
-						url:"GetFileList.action",
-						type:"POST",
-						data:form,
-						dataType:"text",
-						processData:false,
-						contentType:false,
-						success:function(databack){
-							var obj = $.parseJSON(databack);
-							var new_file_list = obj.html;
-							//alert(new_file_list);
-							$("#file_list_body").html(new_file_list);
-						}
-				});
-				$("#statusFeedback").text("成功进入该目录！");
+				$("#statusFeedback").text("您所点击的是文件而不是文件夹，无法进入该目录！");
+				return;
 			}
+			if(this.children[1].children[1].className="glyphicon glyphicon-folder-open" && this.children[1].children[0].children[0].checked)
+				return;*/
+			//更新路径显示
+			console.log("click deteced");
+			curr_path_array = curr_path_array.concat( $.trim(this.innerText) ); //此处用$.trim去除空格
+			console.log($.trim(this.innerText));
+			curr_path_html = "<li>ROOT</li>";
+			for(var i=1;i<curr_path_array.length;i++)
+			curr_path_html = curr_path_html + "<li>" + curr_path_array[i] + "</li>";
+			$("#curr_path").html(curr_path_html);		
+			//ajax
+			var QueryPath="/";
+			if(curr_path_array.length>1)
+				QueryPath="";
+			for(var i=1;i<curr_path_array.length;i++)
+			{
+				QueryPath = QueryPath + curr_path_array[i] + "/" ;
+			}
+			var	form=new FormData();
+
+			var whose = $.cookie("username");
+			form.append("Whose", whose);
+			form.append("Path",QueryPath);
+			//console.log(form.get("whose"));
+			//alert(queryPath);
+			$.ajax({
+					url:"GetFileList.action",
+					type:"POST",
+					data:form,
+					dataType:"text",
+					processData:false,
+					contentType:false,
+					success:function(databack){
+						var obj = $.parseJSON(databack);
+						var new_file_list = obj.html;
+						//alert(new_file_list);
+						$("#file_list_body").html(new_file_list);
+					}
+			});
+			$("#statusFeedback").text("成功进入该目录！");
+		}
 	);
 	
 	//点击的是返回上一层的文件项

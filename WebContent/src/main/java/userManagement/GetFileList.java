@@ -82,7 +82,7 @@ public class GetFileList extends ActionSupport{
 			html = html + 
 			"<tr class=\"file_list_go\">"+
 				"<td> </td>"+
-				(fileArray[i].isFolder()?"<td> <label><input type=\"checkbox\"></label> 　　<span class=\"glyphicon glyphicon-folder-open\"></span>　" + fileArray[i].getFileName()+"</td>":"<td> <label><input type=\"checkbox\"></label> 　　<span class=\"glyphicon glyphicon-file\"></span>　" + fileArray[i].getFileName()+"</td>") +
+				(fileArray[i].isFolder()?"<td> <label><input type=\"checkbox\"></label> 　　<i class=\"glyphicon glyphicon-folder-open\">　" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input type=\"checkbox\"></label> 　　<i class=\"glyphicon glyphicon-file\">　" + fileArray[i].getFileName()+"</i></td>") +
 				"<td>"+fileArray[i].getAttribute()+"</td>"+
 				"<td>"+fileArray[i].getTime()+"</td>"+
 			"</tr>";			
