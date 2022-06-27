@@ -541,7 +541,7 @@ function Check_fileRename() {
 		path = "";
 		//如果ｉｔｅｍ不为空，则进行处理
 		var children=item.children();
-		if( (children[1].children[1].className=="glyphicon glyphicon-file") && (children[1].children[0].children[0].checked))
+		if(children[1].children[0].children[0].checked)
 		{
 			//文件路径
 			path = path + "/";
@@ -578,7 +578,7 @@ function fileRename() {
 		path = "";
 		//如果ｉｔｅｍ不为空，则进行处理
 		var children=item.children();
-		if( (children[1].children[1].className=="glyphicon glyphicon-file") && (children[1].children[0].children[0].checked))
+		if( children[1].children[0].children[0].checked )
 		{
 			//文件路径
 			path = path + "/";
@@ -589,12 +589,28 @@ function fileRename() {
 				path = path + curr_path_array[i] + "/" ;
 			//文件名
 			name = name + $.trim(children[1].innerText);
+
+			var isfolder;
+			if(children[1].children[1].className=="glyphicon glyphicon-file")
+				isfolder = 0;
+			else
+				isfolder = 1;
 			
 			var renameResult;
 			var form = new FormData();
 			form.append("path", path);
 			form.append("name", name);
 			form.append("newname", new_name);
+			form.append("isfolder", isfolder);
+			form.append("whose", $.cookie("username"));
+
+			console.log(path + " " + name + " " + new_name);
+
+			var dirpath = path + name + "/";
+			if(path=="/")
+				dirpath = name + "/";
+			console.log(dirpath);
+
 			$.ajax({
 				url:"FileDownloader!renameRegister.action",
 				type:"POST",
@@ -648,7 +664,7 @@ $(document).ready(function(){
 	$("#button_confirm").click(function(){
 		document.getElementById("rename_dialog").style.display="none";
 		fileRename();
-		location.reload();
+		//location.reload();
 	});
 
 	$(".close").click(function(){

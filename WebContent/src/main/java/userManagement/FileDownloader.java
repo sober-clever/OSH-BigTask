@@ -305,18 +305,71 @@ public class FileDownloader extends ActionSupport{
 	public String renameRegister(){
 		System.out.println("renameRegister is called");
 
-		Query query = new Query();
+		if(isfolder==0){ //重命名文件
+			Query query = new Query();
 
-		boolean flag = query.renameFile(path, name, newname);
+			boolean flag = query.renameFile(path, name, newname);
 
-		if(flag){
-			result = "success";
-			return "success";
+			if(flag){
+				result = "success";
+				return "success";
+			}
+			else{
+				result = "failure";
+				return "success";
+			}
 		}
-		else{
-			result = "failure";
-			return "success";
+		else{//重命名目录
+			Query query = new Query();
+
+			String dirpath = path + name + "/";
+			if(path.equals("/"))
+				dirpath = name + "/";
+			
+			String new_dirpath = path + newname + "/";
+			if(path.equals("/"))
+				new_dirpath = newname + "/";
+
+			FileItem[] files = query.queryDirFile(whose, dirpath);
+			
+			String s = "";
+
+			if(files != null){
+				int i;
+				for(i=0; i<files.length; i++){
+					String filepath = files[i].getPath();
+					
+					Query query1 = new Query();
+					
+					filepath = filepath.replaceAll(dirpath, "");
+					filepath = new_dirpath + filepath;
+					
+					boolean flag1 = query1.changePath(files[i].getPath(), files[i].getFileName(), filepath);
+
+					s += (dirpath + "-" + filepath + " ");
+
+					if(!flag1){
+						result = "Failure: Change path error";
+						return "success";
+					}
+		
+				}
+			}
+
+			Query query2 = new Query();
+
+			boolean flag2 = query2.renameFile(path, name, newname);
+
+			if(!flag2){
+				result = "Failure: rename dir error";
+				return "success";
+			}
+			else{
+				result = s;
+				return "success";
+			}
 		}
+		
 	}
 
 	public String adddirRegister(){
@@ -344,67 +397,6 @@ public class FileDownloader extends ActionSupport{
 		return "success";
 	}
 
-	public String deldirRegister(){
-		result = "copy";
-		return "successs";
-
-		/*Query query = new Query();
-
-		String dirpath = path + "/" + name;
-
-		// 删除目录下的文件夹和子目录
-		FileItem[] files = query.queryDirFile(whose, dirpath);
-
-		int i;
-		for(i=0; i<files.length; i++){
-			if (files[i].isFolder()==false) //是文件，则需要删碎片
-			{
-				
-				int nod = files[i].getNod();  // 获取 division 的数量
-
-				int noa = files[i].getNoa();  // 获取 append 的数量
-
-				int id = files[i].getId();  // 获取文件的 id
-			
-				for(i=0; i<nod+noa; i++){  // 删除相应的文件碎片
-					Query query1 = new Query();
-					boolean frag_flag = query1.deleteFragment(id*100+i);
-					if(!frag_flag){
-						result = "Failure: fragment error";
-						return "success";
-					}
-				}
-
-				Query query1 = new Query();
-				boolean flag = query1.deleteFile(files[i].getPath(), files[i].getFileName());
-				if(!flag){
-					result = "Failure: files error";
-					return "success";
-				}
-			}
-			else
-			{
-				Query query1 = new Query();
-				boolean flag = query1.deleteDir(files[i].getPath(), files[i].getFileName());
-				if(!flag){
-					result = "Failure: subdir error";
-					return "success";
-				}
-			}
-		}
-
-		Query query2 = new Query();
-		// 删除该目录
-		boolean flag2 = query2.deleteDir(path, name);
-
-		if(!flag2){
-			result = "Failure: dir error";
-			return "success";
-		}
-
-		result = "sucess";
-		return "success";*/
-	}
 
 	public String deleteRegister(){
 		System.out.println("deleteRegister is called");
@@ -457,11 +449,6 @@ public class FileDownloader extends ActionSupport{
 			
 			// 查找目录下的文件夹和子目录
 			FileItem[] files = query.queryDirFile(whose, dirpath);
-
-			if(files == null){
-				result = " empty dir " + dirpath;
-				return "success";
-			}
 
 			//逐一删除文件和子目录
 			if(files != null){
