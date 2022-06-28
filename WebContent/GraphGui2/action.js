@@ -67,13 +67,28 @@
         console.log("('rename', {'name': '" + myName + "', 'path': '" + myPath + "', 'owner': '" + decodeURIComponent(FS_username) + "', 'newname': '" + newName + "'})");
         ws.send("('rename', {'name': '" + myName + "', 'path': '" + myPath + "', 'owner': '" + decodeURIComponent(FS_username) + "', 'newname': '" + newName + "'})");
 
-        location.reload();
-        /*var form = new FormForm();
+        var form = new FormData();
         form.append("isfolder", 0);
         form.append("path", myPath);
         form.append("newname", newName);
         form.append("name", myName);
-        form.append("whose", decodeURIComponent(FS_username));*/
+        form.append("whose", decodeURIComponent(FS_username));
+
+        $.ajax({
+            url:"FileDownloader!renameRegister.action",
+            type:"POST",
+            data:form,
+            dataType:"text",
+            processData:false,
+            contentType:false,
+            async:false,
+            success:function(databack){
+                renameResult = $.parseJSON(databack);
+            }
+        });
+
+        console.log("Rename " + renameResult.result);    
+        location.reload();
 
         // console.log("{'command': 'open', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
         // ws.send("{'command': 'open', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
@@ -99,6 +114,29 @@
         ws.send("('delete', {'name': '" + myName + "', 'path': '" + myPath + "', 'owner': '" + decodeURIComponent(FS_username) + "'})");
 
         // ws.send("{'command': 'delete', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
+
+
+        var form=new FormData();
+        form.append("path", myPath);
+        form.append("name", myName);
+        form.append("isfolder", 0);
+        form.append("whose", decodeURIComponent(FS_username));
+
+        $.ajax({
+            url:"FileDownloader!deleteRegister.action",
+            type:"POST",
+            data:form,
+            dataType:"text",
+            processData:false,
+            contentType:false,
+            async: false,								//此处采用同步查询进度
+            success:function(databack){
+                deleteResult = $.parseJSON(databack);
+                //alert(result);
+            }
+        });
+
+        console.log("Delete " + deleteResult.result);
 
         alert("删除成功");
         location.reload();
