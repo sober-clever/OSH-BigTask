@@ -75,6 +75,46 @@
 	</div>
 </div>
 
+<script>
+	function mySubmitForm() {
+		var uname = $.cookie("username");
+		document.getElementById("username").value = uname;
+		document.getElementById("myform").submit();
+	}
+</script>
+
+<!-- ghx -->
+<div id="wrapper">
+	<div id="bg"></div>
+	<div id="overlay"></div>
+	<div id="main">
+
+		<!-- Header -->
+			<header id="header">
+				<h1>DisGraFS</h1>
+				<nav>
+					<form method="GET" action="../GraphGui2/index.html" id="myform">
+						<!-- <p>请输入您的JuiceFS挂载路径</p> -->
+						<!-- <input type="text" name = "pos"><br> -->
+						<input type="hidden" name="pos" id="pos" value="Z:"><br>
+						<!-- <p>请输入您的用户名</p> -->
+						<!-- <input type="text" name = "username"><br> -->
+						<input type="hidden" name="username" id="username" value=""><br>
+						<!-- <button type="submit" id = "BEGIN">BEGIN</button> -->
+						<input type="button" value="Graph" onclick="mySubmitForm()">
+					</form>
+				</nav>
+				<p><a href="Download">Download The Client Plug</a><p>
+			</header>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<span class="copyright">&copy; DisGraFS Group. Design: <a href="www.baidu.com">CHANGEX</a>.</span>
+			</footer>
+		
+	</div>
+</div>
+
 <div class="layui-row">
 	<div style="margin:50px auto 10px; text-align:center; width:80%;">
 		<h1 style="font-family: Arial, Helvetica, sans-serif; font-size: 6rem; color: #087933;">

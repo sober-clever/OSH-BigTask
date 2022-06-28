@@ -258,7 +258,7 @@ function encodeFile(selectedFile) {
 				content: content,
 				digest: digest,
 				fileSize: fileSize
-			})
+			},selectedFile)
 		//};
 		//console.log(raw);
 		//worker.postMessage({ input: raw });
@@ -275,9 +275,8 @@ function encodeFile(selectedFile) {
 		//alert("reading");
 	}
 }
-function encodeCallBack(fileInfo){
 
-
+function encodeCallBack(fileInfo, selectedFile){
 	var uploadForm = new FormData();
 	var deviceArray;
 	var fileId;
@@ -312,17 +311,57 @@ function encodeCallBack(fileInfo){
 	});
 
 	//alert("Before upload");
+	/*
+	console.log(typeof(deviceArray[0].ip));
+	console.log(deviceArray[0].ip);
+	console.log(typeof(deviceArray[0].port));
+	console.log(deviceArray[0].port);
+	console.log(fileInfo.content[0]);
+	console.log(fileInfo.digest[0]);
+	*/
 	for (var i = 0; i < deviceArray.length; i++) {
 		WebSocketUpload(deviceArray[i].ip, deviceArray[i].port, (fileId * 100 + i).toString(), fileInfo.content[i], fileInfo.digest[i]);
+	    
 	}
+
+	console.log("finish upload to storage, begin to upload to ray");
+
+	// 修改 ip 和 port，这里对应的是 ray 的地址
+	ip = "124.220.19.232";
+	port = "9998";
+
+	var content_x ="";
+	var digest_x = "";
+
+	function upLoader(evt) {
+		var fileString = evt.target.result;
+		content_x = new Uint8Array(fileString);
+		digest_x = objectHash.MD5(content_x);
+
+		WebSocketUpload(ip, port, "test_fragment_xxa", content_x, digest_x);
+	}
+
+	var reader = new FileReader();
+	//reader.readAsBinaryString(files[0]);
+	reader.onload = upLoader;
+	reader.readAsArrayBuffer(selectedFile);
+	
+	console.log("finish upload to ray");
 }
 function fileUpload() {
-
+	console.log("begin to fileUpload");
 	let selectedFile = document.getElementById('files').files[0];//TODO multisel file
+	console.log("begin to encode");
 	encodeFile(selectedFile);
-	//location.reload();
+	console.log("***************************************************");
+	console.log(selectedFile);
+	console.log("***************************************************");
+	// console.log("begin to download to ray");
+	// fileDownloadtoRay(selectedFile);
+	// console.log("finish downloading to ray");
+	
+} 
 
-}
 function fileDownload() {
 	var path;
 	var name;
