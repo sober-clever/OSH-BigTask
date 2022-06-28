@@ -67,12 +67,14 @@
         console.log("('rename', {'name': '" + myName + "', 'path': '" + myPath + "', 'owner': '" + decodeURIComponent(FS_username) + "', 'newname': '" + newName + "'})");
         ws.send("('rename', {'name': '" + myName + "', 'path': '" + myPath + "', 'owner': '" + decodeURIComponent(FS_username) + "', 'newname': '" + newName + "'})");
 
-        var form = new FormForm();
+        location.reload();
+        /*var form = new FormForm();
         form.append("isfolder", 0);
         form.append("path", myPath);
         form.append("newname", newName);
         form.append("name", myName);
-        form.append("whose", decodeURIComponent(FS_username));
+        form.append("whose", decodeURIComponent(FS_username));*/
+
         // console.log("{'command': 'open', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
         // ws.send("{'command': 'open', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
     }
@@ -99,6 +101,7 @@
         // ws.send("{'command': 'delete', 'parameter': ['"+ obj.parentNode.children[0].children[1].children[0].innerText +"']}");
 
         alert("删除成功");
+        location.reload();
     }
 
     function FileMenuGet(obj){
