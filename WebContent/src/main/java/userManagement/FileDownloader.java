@@ -2,9 +2,11 @@ package userManagement;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import Shell.*;
 import database.*;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -401,7 +403,9 @@ public class FileDownloader extends ActionSupport{
 	public String deleteRegister(){
 		System.out.println("deleteRegister is called");
 
-		if(isfolder==0){ 
+		if(isfolder==0){
+			//result = "test";
+			//return "success"; 
 			// 删除的是文件
 			Query query = new Query();
 
@@ -413,12 +417,23 @@ public class FileDownloader extends ActionSupport{
 			int noa = fileItem.getNoa();  // 获取 append 的数量
 
 			int id = fileItem.getId();  // 获取文件的 id
-
+			
 			boolean frag_flag = true;
 			int fail_id = -1;
 			for(int i=0; i<nod+noa; i++){  // 删除相应的文件碎片
 				Query query1 = new Query();
+				//int temp = id*100 + i;
 				frag_flag = query1.deleteFragment(id*100+i);
+				
+				//shell.execute("uname -s -r -v");
+				
+				
+
+				//String cmd = "rm ~c1/" + temp;
+				//shell.execute(cmd);
+				//String cmd2 = cmd + ".digest";
+				//shell.execute(cmd2);
+
 				if(!frag_flag) {
 					fail_id = id*100 + i;
 					break;
@@ -427,7 +442,7 @@ public class FileDownloader extends ActionSupport{
 
 			boolean flag=query.deleteFile(path, name);
 			if(flag && frag_flag){
-				result = "success";
+				result = String.valueOf(id);
 				return "success";
 			}
 			else if(!frag_flag){
