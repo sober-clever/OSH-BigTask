@@ -39,6 +39,7 @@ public class Shell {
      this.password = password;
      stdout = new ArrayList<String>();
   }
+  
   /**
    * 执行shell命令
    * @param command
