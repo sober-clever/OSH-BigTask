@@ -503,13 +503,15 @@ function fileDelete() {
 			form.append("isfolder", isfolder);
 			form.append("whose", whose);
 
-			/*let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
+			let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
 			
 			if(isfolder == 0) //网页端的删除文件行为需要同步到图数据库上
 				ws2.onopen = function()
 				{
+					ws2.send($.cookie("username")+"_web");
+					console.log("('delete', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + whose + "'})");
 					w2.send("('delete', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + whose + "'})");
-				}*/
+				}
 				
 			$.ajax({
 				url:"FileDownloader!deleteRegister.action",
