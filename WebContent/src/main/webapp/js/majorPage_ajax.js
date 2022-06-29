@@ -652,13 +652,14 @@ function fileRename() {
 			form.append("whose", $.cookie("username"));
 
 			// 网页端的重命名行为需要同步到图数据库上
-			/*let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
+			let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
 			
 			ws2.onopen = function()
 			{
+				ws2.send($.cookie("username")+"_web");
 				ws2.send("('rename', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + $.cookie("username") + "', 'newname': '" + new_name + "'})");
 				console.log("('rename', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + $.cookie("username") + "', 'newname': '" + new_name + "'})");
-			}*/
+			}
 
 			console.log(path + " " + name + " " + new_name);
 
