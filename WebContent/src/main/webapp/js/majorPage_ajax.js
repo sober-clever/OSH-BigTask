@@ -510,7 +510,7 @@ function fileDelete() {
 				{
 					ws2.send($.cookie("username")+"_web");
 					console.log("('delete', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + whose + "'})");
-					w2.send("('delete', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + whose + "'})");
+					ws2.send("('delete', {'name': '" + name + "', 'path': '" + path + "', 'owner': '" + whose + "'})");
 				}
 				
 			$.ajax({
