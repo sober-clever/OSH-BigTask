@@ -660,6 +660,84 @@ public class Query {
         }
     }
 
+    public int queryFragDevice(int fragid){
+        // 查询某个文件碎片存在哪个节点上
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement();
+            String sql;
+            sql = String.format("SELECT * FROM DFS.FRAGMENT WHERE ID='%d';", fragid);
+
+            rs = stmt.executeQuery(sql);
+            conn.close();
+
+            if(!rs.last())
+                return -1;
+
+            // 返回文件碎片所在的存储节点
+            return rs.getInt("PATH");
+            
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public int queryDeviceLftRS(int deviceid){
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.createStatement();
+            String sql;
+            sql = String.format("SELECT * FROM DFS.DEVICE WHERE ID='%d';", deviceid);
+
+            rs = stmt.executeQuery(sql);
+            conn.close();
+
+            if(!rs.last())
+                return -1;
+
+            // 返回设备的剩余容量
+            return rs.getInt("LEFTRS");
+            
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    public boolean updateDeviceLftRS(int deviceid, int fragsize, int lftRS){
+        // 更新设备的剩余容量
+
+        Statement stmt = null;
+
+        try {
+            stmt = conn.createStatement();
+            String sql;
+
+            int newRS = lftRS + fragsize;
+
+            sql = String.format("UPDATE SET DFS.DEVICE LEFTRS='%d' WHERE ID='%d';", newRS, deviceid);
+
+            stmt.executeUpdate(sql);
+            conn.close();
+
+            return true;
+
+            // 返回文件碎片所在的存储节点
+            //return rs.getInt("PATH");
+            
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     public DeviceItem[] queryOnlineDevice(){
         Statement stmt = null;
         ResultSet rs = null;

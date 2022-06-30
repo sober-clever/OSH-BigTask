@@ -53,9 +53,9 @@ public class UserReg extends ActionSupport{
 		int ID = query.addUser(userName, userPasswd); /**新建用户 */
 		query.closeConnection();
 		if(ID==-1)
-			result = "注册失败!";
+			result = "注册失败";
 		else
-			result = "恭喜你，注册成功!";
+			result = "注册成功";
 		return "success";
 	}
 	

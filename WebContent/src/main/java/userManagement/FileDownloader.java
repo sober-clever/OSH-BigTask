@@ -418,23 +418,39 @@ public class FileDownloader extends ActionSupport{
 
 			int id = fileItem.getId();  // 获取文件的 id
 			
-			boolean frag_flag = true;
+			int size = fileItem.getFileSize();
+
+			int frag_size = size/7;
+			boolean frag_flag = true, upd_flag = true;
 			int fail_id = -1;
-			for(int i=0; i<nod+noa; i++){  // 删除相应的文件碎片
+			for(int i=0; i<nod+noa; i++){ // 删除相应的文件碎片
 				Query query1 = new Query();
 				//int temp = id*100 + i;
 				frag_flag = query1.deleteFragment(id*100+i);
 				
-				//shell.execute("uname -s -r -v");
-				
-				
+				// 查询文件碎片所在的设备编号
+				Query query3 = new Query();
+				int deviceid = query3.queryFragDevice(id*100+i);
 
-				//String cmd = "rm ~c1/" + temp;
-				//shell.execute(cmd);
-				//String cmd2 = cmd + ".digest";
-				//shell.execute(cmd2);
+				if(deviceid <=0 ){
+					result = "device error";
+					return "success";
+				}
 
-				if(!frag_flag) {
+				// 查询设备的剩余容量
+				Query query4 = new Query();
+				int lftRS = query4.queryDeviceLftRS(deviceid);
+
+				if(lftRS < 0){
+					result = "device error";
+					return "success";
+				}
+
+				// 更新设备的剩余容量
+				Query query2 = new Query();
+				upd_flag = query2.updateDeviceLftRS(deviceid, frag_size, lftRS);
+				
+				if(!frag_flag || !upd_flag) {
 					fail_id = id*100 + i;
 					break;
 				}
@@ -465,6 +481,8 @@ public class FileDownloader extends ActionSupport{
 			// 查找目录下的文件夹和子目录
 			FileItem[] files = query.queryDirFile(whose, dirpath);
 
+			result = "[";
+
 			//逐一删除文件和子目录
 			if(files != null){
 				int i;
@@ -477,14 +495,44 @@ public class FileDownloader extends ActionSupport{
 						int noa = files[i].getNoa();  // 获取 append 的数量
 
 						int id = files[i].getId();  // 获取文件的 id
+
+						int size = files[i].getFileSize();
+
+						int frag_size = size/7;
+						
+						result = result + id + ",";
 						
 						int j;
 						for(j=0; j<nod+noa; j++){  // 删除相应的文件碎片
 							Query query1 = new Query();
+							//int temp = id*100 + i;
 							boolean frag_flag = query1.deleteFragment(id*100+j);
-							if(!frag_flag){
-								result = "Failure: fragment error";
+							
+							// 查询文件碎片所在的设备编号
+							Query query3 = new Query();
+							int deviceid = query3.queryFragDevice(id*100+j);
+
+							if(deviceid <=0 ){
+								result = "device error";
 								return "success";
+							}
+
+							// 查询设备的剩余容量
+							Query query4 = new Query();
+							int lftRS = query4.queryDeviceLftRS(deviceid);
+
+							if(lftRS < 0){
+								result = "device error";
+								return "success";
+							}
+
+							// 更新设备的剩余容量
+							Query query2 = new Query();
+							boolean upd_flag = query2.updateDeviceLftRS(deviceid, frag_size, lftRS);
+				
+							if(!frag_flag || !upd_flag) {
+								result = "frag failed";
+								return "success";	
 							}
 						}
 
@@ -516,7 +564,7 @@ public class FileDownloader extends ActionSupport{
 				return "success";
 			}
 
-			result = "sucess";
+			result = result + "]"; // 返回要删除的文件 id 组成的列表
 			return "success";
 			//result = "copy";
 			//return "success";

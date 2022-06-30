@@ -503,7 +503,7 @@ function fileDelete() {
 			form.append("isfolder", isfolder);
 			form.append("whose", whose);
 
-			/*let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
+			let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
 			
 			if(isfolder == 0) //网页端的删除文件行为需要同步到图数据库上
 				ws2.onopen = function()
@@ -525,7 +525,7 @@ function fileDelete() {
 					console.log("('delfolder', {'path': '" + dirpath + "', 'owner': '" + whose + "'})");
 					ws2.send("('delfolder', {'path': '" + dirpath + "', 'owner': '" + whose + "'})");
 				}
-			}*/
+			}
 				
 			$.ajax({
 				url:"FileDownloader!deleteRegister.action",
@@ -541,15 +541,18 @@ function fileDelete() {
 				}
 			});
 			
-			let ws2 = new WebSocket("ws://124.220.19.232:9091");
+			let ws3 = new WebSocket("ws://43.142.97.10:9092");
 
-			if(isfolder == 0)
-				ws2.onopen = function()
-				{
-					console.log("send " + deleteResult.result);
-					ws2.send(deleteResult.result);
-					
-				}
+			//let ws3 = new WebSocket("ws://192.168.40.133:9092");
+			// 如果删除的是文件，则需要把返回的 ID 以列表的形式发送过去
+			if(isfolder == 0) deleteResult.result = "[" + deleteResult.result + "]" 
+
+			ws3.onopen = function()
+			{
+				console.log("send " + deleteResult.result);
+				ws3.send(deleteResult.result);
+				
+			}
 
 			console.log("Delete " + deleteResult.result);
 		}
@@ -678,7 +681,7 @@ function fileRename() {
 			form.append("whose", $.cookie("username"));
 
 			// 网页端的重命名行为需要同步到图数据库上
-			/*let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
+			let ws2 = new WebSocket("ws://101.33.236.114:9090"); //创建WebSocket连接
 			
 			if(isfolder == 0)
 			{ //重命名文件
@@ -707,7 +710,7 @@ function fileRename() {
 					ws2.send("('refolder', {'newpath': '" + newdirpath + "', 'path': '" + dirpath + "', 'owner': '" + $.cookie("username") + "'})");
 					console.log("('refolder', {'newpath': '" + newdirpath + "', 'path': '" + dirpath + "', 'owner': '" + $.cookie("username") + "'})");
 				}
-			}*/
+			}
 
 			console.log(path + " " + name + " " + new_name);
 
