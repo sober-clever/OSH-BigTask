@@ -64,8 +64,10 @@ public class Query {
                 String fileType=rs.getString("FILETYPE");
                 int fileSize=rs.getInt("FILESIZE");
                 String whose=rs.getString("WHOSE");
+                int isShare=rs.getInt("ISSHARE");
+                int originID=rs.getInt("ORIGINID");
 
-                fileItem=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose);
+                fileItem=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose,isShare,originID);
             }
         }
         catch(Exception e){
@@ -404,7 +406,9 @@ public class Query {
                 String fileType=rs.getString("FILETYPE");
                 int fileSize=rs.getInt("FILESIZE");
                 String path=rs.getString("PATH");
-                fileArray[i]=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose);
+                int isShare=rs.getInt("ISSHARE");
+                int originID=rs.getInt("OriginID");
+                fileArray[i]=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose,isShare,originID);
                 rs.next();
                 i++;
             }
@@ -469,8 +473,10 @@ public class Query {
                 isFolder = rs.getBoolean("ISFOLDER");
                 String fileType=rs.getString("FILETYPE");
                 int fileSize=rs.getInt("FILESIZE");
+                int isShare=rs.getInt("ISSHARE");
+                int originID=rs.getInt("ORIGINID");
 
-                fileArray[i]=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose);
+                fileArray[i]=new FileItem(id,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose,isShare,originID);
                 rs.next();
                 i++;
             }

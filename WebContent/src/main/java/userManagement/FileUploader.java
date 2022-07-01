@@ -25,9 +25,18 @@ public class FileUploader extends ActionSupport{
 	private String whose;
 	private String dirName;
 	private int fileId;
+	private int originID;
 	//TODO
 	private static final String fragmentFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/downloadFragment";
 	private static final String fileFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/tmpFile";
+
+	public int getOriginID(){
+		return this.originID;
+	}
+
+	public void setOriginID(int originID){
+		this.originID = originID;
+	}
 
 	public String getdirName()
 	{
@@ -244,7 +253,8 @@ public class FileUploader extends ActionSupport{
 			return "success";
 		}
 		else{
-			FileItem newFile=new FileItem(fileName,path,"rwxrwxrwx","",nod,noa,false,fileType,fileSize,whose);
+			// 初始时默认不是共享文件，origin=0 表示该文件不是共享文件
+			FileItem newFile=new FileItem(fileName,path,"rwxrwxrwx","",nod,noa,false,fileType,fileSize,whose,0,0);
 			fileId=query.addFile(newFile);
 			if(fileId<0){
 				//TODO

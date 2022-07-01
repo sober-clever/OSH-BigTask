@@ -85,6 +85,7 @@ public class GetFileList extends ActionSupport{
 				(fileArray[i].isFolder()?"<td> <label><input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" type=\"checkbox\"> &emsp;&emsp;</label><i class=\"ion-android-folder\">&emsp;" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" type=\"checkbox\">&emsp;&emsp;</label> <i input class=\"glyphicon glyphicon-file\">&emsp;" + fileArray[i].getFileName()+"</i></td>") +
 				"<td>"+fileArray[i].getAttribute()+"</td>"+
 				"<td>"+fileArray[i].getTime()+"</td>"+
+				"<td>"+fileArray[i].getIsShare()+"</td>"+
 			"</tr>";			
 		}
 		return "success";
