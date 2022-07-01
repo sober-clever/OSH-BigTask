@@ -166,7 +166,7 @@ public class FileDownloader extends ActionSupport{
 		Query query=new Query();
 
 		// 查询指定路径下是否有某个名字的文件
-		FileItem fileItem=query.queryFile(path, name);
+		FileItem fileItem=query.queryFile(path, name, whose);
 
 		// 查询在线的所有设备组成的数组
 		DeviceItem onlineDevice[]=query.queryOnlineDevice();
@@ -275,7 +275,7 @@ public class FileDownloader extends ActionSupport{
 		}
 	}
 	
-	public String progressCheck(){
+	/*public String progressCheck(){
 		//return -1 if error
 		//else, return a number from 0 to 100 as # of fragments which have been downloaded
 		Query query=new Query();
@@ -304,7 +304,7 @@ public class FileDownloader extends ActionSupport{
 			result = Integer.toString(collectedFiles);
 			return "success";
 		}		
-	}
+	}*/
 	
 
 	public String renameRegister(){
@@ -313,7 +313,7 @@ public class FileDownloader extends ActionSupport{
 		if(isfolder==0){ //重命名文件
 			Query query = new Query();
 
-			boolean flag = query.renameFile(path, name, newname);
+			boolean flag = query.renameFile(path, name, newname, whose);
 
 			if(flag){
 				result = "success";
@@ -349,7 +349,7 @@ public class FileDownloader extends ActionSupport{
 					filepath = filepath.replaceAll(dirpath, "");
 					filepath = new_dirpath + filepath;
 					
-					boolean flag1 = query1.changePath(files[i].getPath(), files[i].getFileName(), filepath);
+					boolean flag1 = query1.changePath(files[i].getPath(), files[i].getFileName(), filepath, whose);
 
 					s += (dirpath + "-" + filepath + " ");
 
@@ -363,7 +363,7 @@ public class FileDownloader extends ActionSupport{
 
 			Query query2 = new Query();
 
-			boolean flag2 = query2.renameFile(path, name, newname);
+			boolean flag2 = query2.renameFile(path, name, newname, whose);
 
 			if(!flag2){
 				result = "Failure: rename dir error";
@@ -413,7 +413,7 @@ public class FileDownloader extends ActionSupport{
 			Query query = new Query();
 
 			
-			FileItem fileItem = query.queryFile(path, name);
+			FileItem fileItem = query.queryFile(path, name, whose);
 
 			int nod = fileItem.getNod();  // 获取 division 的数量
 
@@ -471,7 +471,7 @@ public class FileDownloader extends ActionSupport{
 				result = result + "(" + String.valueOf(id*100+i) + "," + String.valueOf(deviceid) + "),";
 			}
 
-			boolean flag=query.deleteFile(path, name);
+			boolean flag=query.deleteFile(path, name, whose);
 			if(flag && frag_flag && upd_flag){
 				// 成功删除文件
 				result = result + "]";
@@ -561,7 +561,7 @@ public class FileDownloader extends ActionSupport{
 						}
 
 						Query query1 = new Query();
-						boolean flag = query1.deleteFile(files[i].getPath(), files[i].getFileName());
+						boolean flag = query1.deleteFile(files[i].getPath(), files[i].getFileName(), whose);
 						if(!flag){
 							result = "Failure: files error";
 							return "success";
@@ -570,7 +570,7 @@ public class FileDownloader extends ActionSupport{
 					else
 					{
 						Query query1 = new Query();
-						boolean flag = query1.deleteDir(files[i].getPath(), files[i].getFileName());
+						boolean flag = query1.deleteDir(files[i].getPath(), files[i].getFileName(), whose);
 						if(!flag){
 							result = "Failure: subdir error";
 							return "success";
@@ -582,7 +582,7 @@ public class FileDownloader extends ActionSupport{
 
 			Query query2 = new Query();
 		// 删除该目录
-			boolean flag2 = query2.deleteDir(path, name);
+			boolean flag2 = query2.deleteDir(path, name, whose);
 
 			if(!flag2){
 				result = "Failure: dir error";
@@ -604,7 +604,7 @@ public class FileDownloader extends ActionSupport{
 		System.out.println("decodeFile is called");
 		
 		Query query=new Query();
-		FileItem fileItem=query.queryFile(path, name);
+		FileItem fileItem=query.queryFile(path, name, whose);
 		query.closeConnection();
 		if (fileItem==null)
 		{

@@ -228,7 +228,7 @@ public class FileUploader extends ActionSupport{
 		System.out.println("uploadRegister is called");
 
 		Query query=new Query();
-		FileItem fileItem=query.queryFile(path, fileName);
+		FileItem fileItem=query.queryFile(path, fileName, whose);
 		DeviceItem[] onlineDevice =query.queryOnlineDevice();
 
 		if(onlineDevice==null)
@@ -289,7 +289,7 @@ public class FileUploader extends ActionSupport{
 		//return -1 if error
 		//else, return a number from 0 to 100 as # of fragments which have been downloaded
 		Query query=new Query();
-		FileItem fileItem=query.queryFile(path, fileName);
+		FileItem fileItem=query.queryFile(path, fileName, whose);
 		query.closeConnection();
 		if (fileItem==null)
 		{
@@ -326,7 +326,7 @@ public class FileUploader extends ActionSupport{
 		System.out.println("decodeFile is called");
 
 		Query query=new Query();
-		FileItem fileItem=query.queryFile(path, fileName);
+		FileItem fileItem=query.queryFile(path, fileName, whose);
 		query.closeConnection();
 		if (fileItem==null)
 		{

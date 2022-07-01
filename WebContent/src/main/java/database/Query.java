@@ -43,14 +43,14 @@ public class Query {
         }
     }
 
-    public FileItem queryFile(String path,String name){
+    public FileItem queryFile(String path,String name,String mywhose){
         Statement stmt = null;
         ResultSet rs = null;
         FileItem fileItem = null;
         try{
             stmt = conn.createStatement();
             String sql;
-            sql = String.format("SELECT * FROM DFS.FILE WHERE NAME='%s' AND PATH='%s'",name,path);
+            sql = String.format("SELECT * FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND WHOSE='%s';",name,path,mywhose);
             // 执行查询操作
             rs = stmt.executeQuery(sql);
 
@@ -88,13 +88,13 @@ public class Query {
         return fileItem;
     }
 	
-    public boolean changePath(String path, String name, String newpath){
+    public boolean changePath(String path, String name, String newpath, String whose){
         Statement stmt=null;
         try{
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("Update DFS.FILE SET PATH='%s' WHERE NAME='%s' AND PATH='%s';", newpath, name, path);
+            sql = String.format("Update DFS.FILE SET PATH='%s' WHERE NAME='%s' AND PATH='%s' AND WHOSE='%s';", newpath, name, path, whose);
             
             stmt.executeUpdate(sql);
 
@@ -108,13 +108,13 @@ public class Query {
         }
     }
     
-    public boolean renameFile(String path, String name, String newname){
+    public boolean renameFile(String path, String name, String newname, String whose){
         Statement stmt=null;
         try{
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("Update DFS.FILE SET NAME='%s' WHERE NAME='%s' AND PATH='%s';", newname, name, path);
+            sql = String.format("Update DFS.FILE SET NAME='%s' WHERE NAME='%s' AND PATH='%s' AND WHOSE='%s'", newname, name, path,whose);
             
             stmt.executeUpdate(sql);
 
@@ -128,13 +128,13 @@ public class Query {
         }
     }
 
-    public boolean deleteDir(String path, String name){
+    public boolean deleteDir(String path, String name, String whose){
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='1';", name, path);
+            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='1' AND WHOSE='%s';", name, path, whose);
 
             stmt.executeUpdate(sql);
 
@@ -150,13 +150,13 @@ public class Query {
     }
 
 
-    public boolean deleteFile(String path, String name){
+    public boolean deleteFile(String path, String name, String whose){
         Statement stmt = null;
         try {
             stmt = conn.createStatement();
 
             String sql;
-            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='0';", name, path);
+            sql = String.format("DELETE FROM DFS.FILE WHERE NAME='%s' AND PATH='%s' AND ISFOLDER='0' AND WHOSE='%s';", name, path, whose);
 
             stmt.executeUpdate(sql);
 
