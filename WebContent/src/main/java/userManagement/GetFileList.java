@@ -82,7 +82,7 @@ public class GetFileList extends ActionSupport{
 			html = html + 
 			"<tr class=\"file_list_go\">"+
 				"<td> </td>"+
-				(fileArray[i].isFolder()?"<td> <label><input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" type=\"checkbox\"></label> 　　<i class=\"ion-android-folder\">　" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input type=\"checkbox\"></label> 　　<i input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" class=\"glyphicon glyphicon-file\">　" + fileArray[i].getFileName()+"</i></td>") +
+				(fileArray[i].isFolder()?"<td> <label><input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" type=\"checkbox\"></label> 　　<i class=\"ion-android-folder\">　" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input style=\"height: 20px; width:20px; margin: 0 auto; display: inline; float:left;\" type=\"checkbox\"></label> 　　<i input class=\"glyphicon glyphicon-file\">　" + fileArray[i].getFileName()+"</i></td>") +
 				"<td>"+fileArray[i].getAttribute()+"</td>"+
 				"<td>"+fileArray[i].getTime()+"</td>"+
 			"</tr>";			
