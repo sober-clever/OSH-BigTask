@@ -181,11 +181,11 @@ public class FileDownloader extends ActionSupport{
 
 		String myfileName = fileItem.getFileName();
 
-		String path = fileItem.getPath();
+		String mypath = "/";
 
 		String myattribute = fileItem.getAttribute();
 
-		String mytime = fileItem.getPath();
+		String mytime = fileItem.getTime();
 
 		int mynod = fileItem.getNod();
 
@@ -205,7 +205,7 @@ public class FileDownloader extends ActionSupport{
 			originid = fileItem.getOriginID();
 		else
 			originid = fileid;
-		FileItem new_file = new FileItem(myfileName, path, myattribute, mytime, mynod, mynoa, myisFolder, myfileType, myfileSize, share_user, 1, originid);
+		FileItem new_file = new FileItem(myfileName, mypath, myattribute, mytime, mynod, mynoa, myisFolder, myfileType, myfileSize, share_user, 1, originid);
 		
 		Query query1 = new Query();
 
@@ -273,6 +273,12 @@ public class FileDownloader extends ActionSupport{
 			int noa=fileItem.getNoa();
 
 			int id=fileItem.getId();
+
+			int isshare = fileItem.getIsShare();
+
+			if(isshare == 1) //表明是共享文件
+				id = fileItem.getOriginID();
+			
 			int deviceID;
 			String str;
 			// 这里的 reqItems 在后面并没有用到
@@ -484,7 +490,38 @@ public class FileDownloader extends ActionSupport{
 			int noa = fileItem.getNoa();  // 获取 append 的数量
 
 			int id = fileItem.getId();  // 获取文件的 id
+
+			int isshare = fileItem.getIsShare();
+
+			if(isshare == 1) //表明是共享文件，直接删除即可，无需删除碎片
+			{
+				Query query_share = new Query();
+				boolean flag_share = query_share.deleteFile(path, name, whose);
+				if(flag_share==false){
+					result = "share del failure";
+					return "success";
+				}
+				result = "share del success";
+				return "success";
+			}
 			
+			Query query_share2 = new Query();
+			FileItem[] Shared_Files = query_share2.querySharedFile(id);
+
+			for(int i=0; i<Shared_Files.length; i++)
+			{
+				String share_path = Shared_Files[i].getPath();
+				String share_name = Shared_Files[i].getFileName();
+				String share_whose = Shared_Files[i].getWhose();
+				Query query_share_3 = new Query();
+				Boolean flag_share_2 = query_share_3.deleteFile(share_path, share_name, share_whose);
+				if(flag_share_2 == false){
+					result = share_whose + "'s " +share_name + " del " + "failure";
+					return "success";  
+				}
+			}
+
+
 			int size = fileItem.getFileSize();
 
 			int frag_size = size/7;

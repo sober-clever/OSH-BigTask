@@ -151,6 +151,69 @@ public class Query {
         }
     }
 
+    public FileItem[] querySharedFile(int id){
+        Statement stmt = null;
+        ResultSet rs = null;
+        FileItem fileArray[] = null;
+
+        try{
+            stmt = conn.createStatement();
+            String sql;
+            
+            // 查出该文件相关的共享文件
+            sql = String.format("SELECT * FROM DFS.FILE WHERE ORIGINID='%d'", id);
+
+            rs = stmt.executeQuery(sql);
+            
+            if(!rs.last())
+                return null;
+
+            
+            int count = rs.getRow();
+
+            fileArray=new FileItem[count];
+            int i=0;
+            rs.first();
+
+            while(i<count){
+                int fileid = rs.getInt("ID");
+                int nod = rs.getInt("NOD");
+                int noa = rs.getInt("NOA");
+                String whose = rs.getString("WHOSE");
+                String name = rs.getString("NAME");
+                String attr = rs.getString("ATTRIBUTE");
+                String time = rs.getString("TIME");
+                boolean isFolder = rs.getBoolean("ISFOLDER");
+                String fileType=rs.getString("FILETYPE");
+                int fileSize=rs.getInt("FILESIZE");
+                String path=rs.getString("PATH");
+                int isShare=rs.getInt("ISSHARE");
+                int originID=rs.getInt("OriginID");
+                fileArray[i]=new FileItem(fileid,name,path,attr,time,nod,noa,isFolder,fileType,fileSize,whose,isShare,originID);
+                rs.next();
+                i++;
+            }
+            conn.close();
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            try{
+                if(rs!=null && !rs.isClosed())
+                    rs.close();
+            }
+            catch(Exception e){
+            }
+            try{
+                if(stmt!=null && !stmt.isClosed())
+                    stmt.close();
+            }
+            catch(Exception e){
+            }
+        }
+        return fileArray;
+    }
 
     public boolean deleteFile(String path, String name, String whose){
         Statement stmt = null;
