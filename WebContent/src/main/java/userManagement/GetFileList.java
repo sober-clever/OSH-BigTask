@@ -62,7 +62,7 @@ public class GetFileList extends ActionSupport{
 		html = html +
 		"<tr class=\"file_list_back\">"+
 			"<td> </td>"+
-			"<td> <label><input type=\"checkbox\">&emsp;&emsp;</label><span class=\"glyphicon glyphicon-folder-open\"></span>&emsp;../</td>"+
+			"<td> <label><input type=\"ion-android-checkbox\">&emsp;&emsp;</label><span class=\"ion-android-folder\"></span>&emsp;../</td>"+
 			"<td></td>"+
 			"<td></td>"+
 		"</tr>";
@@ -82,7 +82,7 @@ public class GetFileList extends ActionSupport{
 			html = html + 
 			"<tr class=\"file_list_go\">"+
 				"<td> </td>"+
-				(fileArray[i].isFolder()?"<td> <label><input type=\"checkbox\"></label> 　　<i class=\"glyphicon glyphicon-folder-open\">　" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input type=\"checkbox\"></label> 　　<i class=\"glyphicon glyphicon-file\">　" + fileArray[i].getFileName()+"</i></td>") +
+				(fileArray[i].isFolder()?"<td> <label><input type=\"ion-android-checkbox\"></label> 　　<i class=\"ion-android-folder\">　" + fileArray[i].getFileName()+"</i></td>":"<td> <label><input type=\"checkbox\"></label> 　　<i class=\"glyphicon glyphicon-file\">　" + fileArray[i].getFileName()+"</i></td>") +
 				"<td>"+fileArray[i].getAttribute()+"</td>"+
 				"<td>"+fileArray[i].getTime()+"</td>"+
 			"</tr>";			
