@@ -21,6 +21,8 @@ public class FileDownloader extends ActionSupport{
 	private String name;
 	private String newname;
 	private String whose;
+	private String share_user;
+
 	//用来返回结果给前端
     private int isfolder;
 	private	String	result;
@@ -33,6 +35,14 @@ public class FileDownloader extends ActionSupport{
 	private static final String fragmentFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/downloadFragment";
 	private static final String fileFolderPath = "/usr/local/tomcat/webapps/DFS/CloudDriveServer/tmpFile";
 	
+	public String getShare_user(){
+		return this.share_user;
+	}
+
+	public void setShare_user(String share_user){
+		this.share_user = share_user;
+	}
+
 	public int getIsfolder()
 	{
 		return this.isfolder;
@@ -155,6 +165,60 @@ public class FileDownloader extends ActionSupport{
 		this.nod = nod;
 	}
 
+	public String shareRegister(){
+		Query query = new Query();
+		
+		// 查出要分享的文件的信息
+
+		FileItem fileItem = query.queryFile(path, name, whose);
+
+		if(fileItem == null){
+			result = "file not found";
+			return "success";
+		}
+
+		int fileid = fileItem.getId();
+
+		String myfileName = fileItem.getFileName();
+
+		String path = fileItem.getPath();
+
+		String myattribute = fileItem.getAttribute();
+
+		String mytime = fileItem.getPath();
+
+		int mynod = fileItem.getNod();
+
+		int mynoa = fileItem.getNoa();
+
+		boolean myisFolder = fileItem.isFolder();
+
+		String myfileType = fileItem.getFileType();
+
+		int myfileSize = fileItem.getFileSize();
+
+		int isshare = fileItem.getIsShare();
+
+		int originid;
+
+		if(isshare == 1) //被分享的文件是共享文件
+			originid = fileItem.getOriginID();
+		else
+			originid = fileid;
+		FileItem new_file = new FileItem(myfileName, path, myattribute, mytime, mynod, mynoa, myisFolder, myfileType, myfileSize, share_user, 1, originid);
+		
+		Query query1 = new Query();
+
+		int flag = query1.addFile(new_file);
+	
+		if(flag == -1){
+			result = "new file addition error";
+			return "success";
+		}
+
+		result = "new file " + flag + " successfully added.";
+		return "success";
+	}
 	
 	public String downloadRegister(){
 		//return -1 if error

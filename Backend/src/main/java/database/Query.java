@@ -1121,10 +1121,11 @@ public class Query {
                 sql = String.format("INSERT INTO DFS.FILE (NAME,PATH,ATTRIBUTE,TIME,NOD,NOA,ISFOLDER,WHOSE,FILETYPE,FILESIZE) "
                                 + "VALUES ('%s','%s','%s','%s',%d,%d,true,'%s','%s',%d);",file.getFileName(),file.getPath(),
                         file.getAttribute(),file.getTime(),1,0,file.getWhose(),"",0);
-            else
-                sql = String.format("INSERT INTO DFS.FILE (NAME,PATH,ATTRIBUTE,TIME,NOD,NOA,ISFOLDER,WHOSE,FILETYPE,FILESIZE) "
-                                + "VALUES ('%s','%s','%s','%s',%d,%d,false,'%s','%s',%d);",file.getFileName(),file.getPath(),
-                        file.getAttribute(),file.getTime(),file.getNod(),file.getNoa(),file.getWhose(),file.getFileType(),file.getFileSize());
+            else // 添加的是文件
+                sql = String.format("INSERT INTO DFS.FILE (NAME,PATH,ATTRIBUTE,TIME,NOD,NOA,ISFOLDER,WHOSE,FILETYPE,FILESIZE,ISSHARE,ORIGINID) "
+                                + "VALUES ('%s','%s','%s','%s',%d,%d,false,'%s','%s',%d,%d,%d);",file.getFileName(),file.getPath(),
+                        file.getAttribute(),file.getTime(),file.getNod(),file.getNoa(),file.getWhose(),file.getFileType(),file.getFileSize(),
+                        file.getIsShare(),file.getOriginID());
             System.out.println(sql);
             suc = stmt.executeUpdate(sql);
             if (suc>0){
