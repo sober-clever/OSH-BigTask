@@ -545,7 +545,7 @@ function fileDelete() {
 
 			//let ws3 = new WebSocket("ws://192.168.40.133:9092");
 			// 如果删除的是文件，则需要把返回的 ID 以列表的形式发送过去
-			if(isfolder == 0) deleteResult.result = "[" + deleteResult.result + "]" 
+			/// if(isfolder == 0) deleteResult.result = "[" + deleteResult.result + "]" 
 
 			ws3.onopen = function()
 			{

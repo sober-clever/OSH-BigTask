@@ -426,6 +426,8 @@ public class FileDownloader extends ActionSupport{
 			int frag_size = size/7;
 			boolean frag_flag = true, upd_flag = true;
 			int fail_id = -1;
+
+			result = "[";
 			for(int i=0; i<nod+noa; i++){ 
 				// 查询文件碎片所在的设备编号
 				Query query3 = new Query();
@@ -436,6 +438,8 @@ public class FileDownloader extends ActionSupport{
 					result = "frag not found " + frag_id;
 					return "success";
 				}
+
+				// 获取碎片所在的设备 ID
 				int deviceid = Integer.valueOf(ret).intValue();
 
 				// 删除相应的文件碎片
@@ -464,11 +468,13 @@ public class FileDownloader extends ActionSupport{
 					result = "upd error" + frag_id;
 					return "success";
 				}
+				result = result + "(" + String.valueOf(id*100+i) + "," + String.valueOf(deviceid) + "),";
 			}
 
 			boolean flag=query.deleteFile(path, name);
 			if(flag && frag_flag && upd_flag){
-				result = String.valueOf(id);
+				// 成功删除文件
+				result = result + "]";
 				return "success";
 			}
 			else if(!frag_flag){
@@ -509,9 +515,7 @@ public class FileDownloader extends ActionSupport{
 						int size = files[i].getFileSize();
 
 						int frag_size = size/7;
-						
-						result = result + id + ",";
-						
+												
 						int j;
 						for(j=0; j<nod+noa; j++){  // 删除相应的文件碎片
 							// 查询文件碎片所在的设备编号
@@ -551,6 +555,9 @@ public class FileDownloader extends ActionSupport{
 								result = "upd error" + frag_id;
 								return "success";
 							}
+							
+							result = result + "(" + String.valueOf(id*100+j) + "," + String.valueOf(deviceid) + "),";
+
 						}
 
 						Query query1 = new Query();
@@ -569,6 +576,7 @@ public class FileDownloader extends ActionSupport{
 							return "success";
 						}
 					}
+	
 				}
 			}
 
