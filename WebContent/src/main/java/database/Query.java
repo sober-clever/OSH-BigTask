@@ -182,7 +182,7 @@ public class Query {
             stmt.executeUpdate(sql);
 
             System.out.println("数据库删除成功");
-            conn.close();
+            //conn.close();
             System.out.println("数据库关闭成功");
             return true;
 
@@ -660,7 +660,7 @@ public class Query {
         }
     }
 
-    public int queryFragDevice(int fragid){
+    public String queryFragDevice(int fragid){
         // 查询某个文件碎片存在哪个节点上
         Statement stmt = null;
         ResultSet rs = null;
@@ -670,18 +670,18 @@ public class Query {
             sql = String.format("SELECT * FROM DFS.FRAGMENT WHERE ID='%d';", fragid);
 
             rs = stmt.executeQuery(sql);
-            conn.close();
-
-            if(!rs.last())
-                return -1;
 
             // 返回文件碎片所在的存储节点
-            return rs.getInt("PATH");
+            String ret = rs.getString("PATH");
             
+            conn.close();
+
+            return ret;
+
         }catch(Exception e)
         {
             e.printStackTrace();
-            return -1;
+            return "1000";
         }
     }
 
@@ -694,7 +694,7 @@ public class Query {
             sql = String.format("SELECT * FROM DFS.DEVICE WHERE ID='%d';", deviceid);
 
             rs = stmt.executeQuery(sql);
-            conn.close();
+            //conn.close();
 
             if(!rs.last())
                 return -1;
@@ -720,10 +720,10 @@ public class Query {
 
             int newRS = lftRS + fragsize;
 
-            sql = String.format("UPDATE SET DFS.DEVICE LEFTRS='%d' WHERE ID='%d';", newRS, deviceid);
+            sql = String.format("UPDATE DFS.DEVICE SET LEFTRS='%d' WHERE ID='%d';", newRS, deviceid);
 
             stmt.executeUpdate(sql);
-            conn.close();
+            //conn.close();
 
             return true;
 

@@ -2,6 +2,9 @@ package userManagement;
 
 import java.io.File;
 import java.util.LinkedList;
+
+import org.apache.struts2.views.jsp.ui.ResetTag;
+
 import java.util.ArrayList;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -423,17 +426,24 @@ public class FileDownloader extends ActionSupport{
 			int frag_size = size/7;
 			boolean frag_flag = true, upd_flag = true;
 			int fail_id = -1;
-			for(int i=0; i<nod+noa; i++){ // 删除相应的文件碎片
-				Query query1 = new Query();
-				//int temp = id*100 + i;
-				frag_flag = query1.deleteFragment(id*100+i);
-				
+			for(int i=0; i<nod+noa; i++){ 
 				// 查询文件碎片所在的设备编号
 				Query query3 = new Query();
-				int deviceid = query3.queryFragDevice(id*100+i);
+				int frag_id = id*100 + i;
+				String ret = query3.queryFragment(id*100+i);
+				if(ret == null)
+				{
+					result = "frag not found " + frag_id;
+					return "success";
+				}
+				int deviceid = Integer.valueOf(ret).intValue();
 
-				if(deviceid <=0 ){
-					result = "device error";
+				// 删除相应的文件碎片
+				Query query1 = new Query();
+				frag_flag = query1.deleteFragment(id*100+i);
+				if(!frag_flag)
+				{
+					result = "delete failure" + frag_id;
 					return "success";
 				}
 
@@ -442,7 +452,7 @@ public class FileDownloader extends ActionSupport{
 				int lftRS = query4.queryDeviceLftRS(deviceid);
 
 				if(lftRS < 0){
-					result = "device error";
+					result = "lftRS error";
 					return "success";
 				}
 
@@ -450,14 +460,14 @@ public class FileDownloader extends ActionSupport{
 				Query query2 = new Query();
 				upd_flag = query2.updateDeviceLftRS(deviceid, frag_size, lftRS);
 				
-				if(!frag_flag || !upd_flag) {
-					fail_id = id*100 + i;
-					break;
+				if(!upd_flag) {
+					result = "upd error" + frag_id;
+					return "success";
 				}
 			}
 
 			boolean flag=query.deleteFile(path, name);
-			if(flag && frag_flag){
+			if(flag && frag_flag && upd_flag){
 				result = String.valueOf(id);
 				return "success";
 			}
@@ -504,16 +514,23 @@ public class FileDownloader extends ActionSupport{
 						
 						int j;
 						for(j=0; j<nod+noa; j++){  // 删除相应的文件碎片
-							Query query1 = new Query();
-							//int temp = id*100 + i;
-							boolean frag_flag = query1.deleteFragment(id*100+j);
-							
 							// 查询文件碎片所在的设备编号
 							Query query3 = new Query();
-							int deviceid = query3.queryFragDevice(id*100+j);
+							int frag_id = id*100 + i;
+							String ret = query3.queryFragment(id*100+j);
+							if(ret == null)
+							{
+								result = "frag not found " + frag_id;
+								return "success";
+							}
+							int deviceid = Integer.valueOf(ret).intValue();
 
-							if(deviceid <=0 ){
-								result = "device error";
+							// 删除相应的文件碎片
+							Query query1 = new Query();
+							boolean frag_flag = query1.deleteFragment(id*100+j);
+							if(!frag_flag)
+							{
+								result = "delete failure" + frag_id;
 								return "success";
 							}
 
@@ -522,17 +539,17 @@ public class FileDownloader extends ActionSupport{
 							int lftRS = query4.queryDeviceLftRS(deviceid);
 
 							if(lftRS < 0){
-								result = "device error";
+								result = "lftRS error";
 								return "success";
 							}
 
 							// 更新设备的剩余容量
 							Query query2 = new Query();
 							boolean upd_flag = query2.updateDeviceLftRS(deviceid, frag_size, lftRS);
-				
-							if(!frag_flag || !upd_flag) {
-								result = "frag failed";
-								return "success";	
+							
+							if(!upd_flag) {
+								result = "upd error" + frag_id;
+								return "success";
 							}
 						}
 

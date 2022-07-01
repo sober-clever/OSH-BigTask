@@ -268,25 +268,6 @@ public class FileUploader extends ActionSupport{
 				jsonArray.add(formDetailsJson);
 				//query.addFragment(fileId*100+i,"1");
 				query.addFragment(fileId*100+i,String.valueOf(deviceItemList[i].getId()));
-				/*
-				str=query.queryFragment(id*100+i);
-				if (str==null || str.equals("-1"))
-					continue;
-				deviceID=Integer.parseInt(str);
-				for (DeviceItem deviceItem : onlineDevice){//TODO
-					if (deviceItem.getId()==deviceID){
-						DeviceItem curDevice=query.queryDevice(deviceID);
-						//reqItems.add(new AnotherRequestItem(curDevice.getIp(), String.valueOf(curDevice.getPort()), String.valueOf(id*100+i),fileType,i));
-
-						JSONObject formDetailsJson = new JSONObject();
-						formDetailsJson.put("filename", String.valueOf(id*100+i));
-						formDetailsJson.put("fragmentId", i);
-						formDetailsJson.put("ip", curDevice.getIp());
-						formDetailsJson.put("port", String.valueOf(curDevice.getPort()));
-						jsonArray.add(formDetailsJson);
-						break;
-					}
-				}*/
 			}
 			if (jsonArray.size() < nod+noa){
 				query.closeConnection();
