@@ -1,7 +1,6 @@
 package userManagement;
 
 import com.opensymphony.xwork2.ActionSupport;
-import database.AnotherRequestItem;
 import database.DeviceItem;
 import database.FileItem;
 import database.Query;
@@ -9,7 +8,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.ArrayList; // fix
 
 public class FileUploader extends ActionSupport{
@@ -251,8 +249,8 @@ public class FileUploader extends ActionSupport{
 			if(fileId<0){
 				//TODO
 			}
-			int deviceID;
-			String str;
+			//int deviceID;
+			//String str;
 			JSONArray jsonArray = new JSONArray();
 			DeviceItem[] deviceItemList=getAllocateDeviceList(query,nod,noa,whose);
 			if(deviceItemList==null){
