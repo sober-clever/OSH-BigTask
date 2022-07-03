@@ -508,18 +508,22 @@ public class FileDownloader extends ActionSupport{
 			Query query_share2 = new Query();
 			FileItem[] Shared_Files = query_share2.querySharedFile(id);
 
-			for(int i=0; i<Shared_Files.length; i++)
-			{
-				String share_path = Shared_Files[i].getPath();
-				String share_name = Shared_Files[i].getFileName();
-				String share_whose = Shared_Files[i].getWhose();
-				Query query_share_3 = new Query();
-				Boolean flag_share_2 = query_share_3.deleteFile(share_path, share_name, share_whose);
-				if(flag_share_2 == false){
-					result = share_whose + "'s " +share_name + " del " + "failure";
-					return "success";  
+
+			if(Shared_Files !=null){
+				for(int i=0; i<Shared_Files.length; i++)
+				{
+					String share_path = Shared_Files[i].getPath();
+					String share_name = Shared_Files[i].getFileName();
+					String share_whose = Shared_Files[i].getWhose();
+					Query query_share_3 = new Query();
+					Boolean flag_share_2 = query_share_3.deleteFile(share_path, share_name, share_whose);
+					if(flag_share_2 == false){
+						result = share_whose + "'s " +share_name + " del " + "failure";
+						return "success";  
+					}
 				}
 			}
+			
 
 
 			int size = fileItem.getFileSize();
